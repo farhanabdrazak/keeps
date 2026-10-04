@@ -16,3 +16,31 @@ $('#show-resolved').addEventListener('change',renderMemories);
 $('#edit-form').addEventListener('submit',e=>{e.preventDefault();const title=$('#memory-title').value.trim();if(!title){$('#memory-title').setCustomValidity('Add a short title for this memory.');$('#memory-title').reportValidity();return}const item={title,category:$('#memory-category').value,detail:$('#memory-detail').value.trim(),scope:editing.mode==='suggestion'?'shared':$('#memory-scope').value,source:editing.source};if(editing.mode==='edit'){Object.assign(memories.find(m=>m.id===editing.id),item)}else{memories.push({...item,id:nextId++,resolved:false})}if(editing.mode==='suggestion'){suggestion=null;renderSuggestion()}scope=item.scope;category='All';$('#show-resolved').checked=false;renderMemories();$('#edit-dialog').close();openPanel();notify(item.scope==='private'?'Saved to Remembered · Only you':'Saved to shared memory')});$('#memory-title').addEventListener('input',()=>$('#memory-title').setCustomValidity(''));
 $('#send-form').addEventListener('submit',e=>{e.preventDefault();const input=$('#message-input'),t=input.value.trim();if(!t)return;const m=addMessage(t,true);input.value='';if(!suggestion){let cat=/\$|pay|owe|transfer|dollar/i.test(t)?'Money':/recommend|try|cafe|restaurant|watch/i.test(t)?'Recommendations':/birthday|anniversary/i.test(t)?'Dates':/decided|agreed|decision/i.test(t)?'Decisions':/send|book|bring|remind|finish/i.test(t)?'To-Dos':/meet|let.s|tomorrow|friday|saturday|sunday/i.test(t)?'Plans':null;if(cat){suggestion={title:t,category:cat,detail:'From your message · Review the details before saving',source:m.id};renderSuggestion()}else notify('Message added. Click it to remember something.')}else notify('Message added to this demo conversation.');scrollBottom()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#memory-panel').classList.remove('open')});init();
+
+/* Theme preference is independent of the resettable demo conversation. */
+const themeToggle = $('#theme-toggle');
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+function applyTheme(theme) {
+  const dark = theme === 'dark';
+  document.documentElement.dataset.theme = theme;
+  themeToggle.setAttribute('aria-pressed', String(dark));
+  themeToggle.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#121722' : '#3158e7';
+}
+applyTheme(document.documentElement.dataset.theme || 'light');
+themeToggle.addEventListener('click', () => {
+  const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  applyTheme(theme);
+  try { localStorage.setItem('keeps-theme', theme); } catch (_) {}
+});
+systemTheme.addEventListener('change', event => {
+  let saved;
+  try { saved = localStorage.getItem('keeps-theme'); } catch (_) {}
+  if (saved !== 'dark' && saved !== 'light') applyTheme(event.matches ? 'dark' : 'light');
+});
+window.addEventListener('storage', event => {
+  if (event.key === 'keeps-theme' || event.key === null) {
+    const theme = event.newValue;
+    applyTheme(theme === 'dark' || theme === 'light' ? theme : systemTheme.matches ? 'dark' : 'light');
+  }
+});
