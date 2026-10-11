@@ -1,0 +1,27 @@
+/* Presentation controls sit outside both interface versions. */
+:root { --version-bar-height: 88px; }
+.version-bar { max-width:1680px; margin:auto; padding:12px 24px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; background:#fff; border-bottom:1px solid var(--border); }
+.version-heading { display:flex; flex-direction:column; gap:4px; }
+.version-heading strong { font-size:13px; }
+.version-heading span { font-size:11px; color:#637087; }
+.version-options { display:flex; padding:4px; gap:4px; border:1px solid var(--border); border-radius:10px; margin-left:auto; }
+.version-options button { padding:9px 14px; border-radius:7px; font-size:12px; }
+.version-options [aria-pressed="true"] { background:#3158e7; color:#fff; }
+.version-details { padding:10px; text-decoration:underline; font-size:12px; color:var(--blue); }
+.app { height:calc(100dvh - var(--version-bar-height)); }
+.comparison-intro { font-size:13px; line-height:1.6; color:var(--muted); }
+#comparison-dialog { max-width:650px; max-height:90dvh; overflow:auto; }
+.comparison-list { padding-left:20px; font-size:13px; line-height:1.65; }
+.comparison-list li { margin-bottom:12px; }
+[data-version="earlier"] #filters,
+[data-version="earlier"] .status-row label { display:none; }
+[data-theme="dark"] .version-bar { background:#171e2b; }
+[data-theme="dark"] .version-heading span { color:#a9b3c6; }
+@media(max-width:1100px) { .memory-panel { top:var(--version-bar-height); } }
+@media(max-width:620px) {
+  .version-bar { padding:10px 14px; gap:8px; }
+  .version-heading { width:100%; }
+  .version-options { margin-left:0; }
+  .version-options button { padding:8px 11px; }
+  .version-details { margin-left:auto; padding:8px 0; }
+}
