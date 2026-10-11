@@ -27,3 +27,15 @@
 }
 
 [data-version="earlier"] .tag { background:#eef0f4; color:#6c7380; }
+
+/* Expandable illustrative research notes in the comparison dialog. */
+.feedback-disclosure { margin-top:20px; border:1px solid var(--border); border-radius:11px; overflow:hidden; }
+.feedback-disclosure summary { cursor:pointer; padding:13px 16px; font-size:13px; font-weight:650; color:var(--blue); background:#f3f6ff; }
+.feedback-disclosure summary:focus-visible { outline:3px solid #9baeff; outline-offset:-3px; }
+.feedback-context { font-size:12px; line-height:1.55; color:var(--muted); margin:13px 16px; }
+.feedback-examples { display:grid; gap:0; }
+.feedback-examples article { padding:14px 16px; border-top:1px solid var(--border); }
+.feedback-examples strong { font-size:12px; color:var(--blue); }
+.feedback-examples blockquote { font-size:13px; line-height:1.65; margin:9px 0; padding-left:12px; border-left:2px solid #9baeff; }
+.feedback-examples p { font-size:12px; line-height:1.55; margin:0; color:var(--muted); }
+[data-theme="dark"] .feedback-disclosure summary { background:#263553; }
