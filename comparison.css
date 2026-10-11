@@ -81,3 +81,49 @@
 @media(prefers-reduced-motion:reduce){
   .memory-backdrop,.memory-panel { transition:none; }
 }
+
+/* Native modal drawer guarantees clicks land on its own X, not the theme control underneath. */
+.memory-backdrop { display:none !important; }
+dialog.memory-panel {
+  position:fixed;
+  top:var(--version-bar-height,0px);
+  bottom:0;
+  left:auto;
+  right:max(0px,calc((100vw - 1680px)/2));
+  margin:0;
+  width:min(390px,100vw);
+  height:calc(100dvh - var(--version-bar-height,0px));
+  max-height:none;
+  max-width:none;
+  border-radius:0;
+  border:0;
+  border-left:1px solid var(--border);
+  padding:30px 24px 0;
+  overflow:hidden;
+  transform:none;
+  visibility:visible;
+  pointer-events:auto;
+  box-shadow:-18px 0 55px rgba(22,36,72,.17);
+  animation:none;
+}
+dialog.memory-panel:not([open]) { display:none !important; }
+dialog.memory-panel[open] { display:flex; flex-direction:column; animation:keeps-drawer-enter .23s ease-out both; }
+dialog.memory-panel::backdrop { background:rgba(16,25,45,.34); backdrop-filter:none; }
+dialog.memory-panel .panel-head .icon-button {
+  display:grid;
+  place-items:center;
+  min-width:42px;
+  width:42px;
+  height:42px;
+  font-size:26px;
+  cursor:pointer;
+  pointer-events:auto;
+  position:relative;
+  z-index:1;
+  border-radius:10px;
+  background:rgba(120,137,170,.09);
+}
+dialog.memory-panel .panel-head .icon-button:hover { background:rgba(120,137,170,.2); }
+@keyframes keeps-drawer-enter { from{ opacity:.75; transform:translateX(22px); } to{ opacity:1; transform:translateX(0); } }
+@media(max-width:620px){ dialog.memory-panel { right:0; width:min(100vw,390px); padding-top:24px; } }
+@media(prefers-reduced-motion:reduce){ dialog.memory-panel[open] { animation:none; } }
