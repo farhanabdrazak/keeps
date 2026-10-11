@@ -10,26 +10,20 @@ function showEditor(item,mode){editing={...item,mode};$('#memory-title').value=i
 // Memory remains outside the messenger layout until explicitly opened.
 function openPanel(){
   const panel=$('#memory-panel');
-  panel.inert=false;
-  panel.removeAttribute('aria-hidden');
-  panel.classList.add('open');
-  $('#memory-backdrop').classList.add('open');
+  if(panel.open) return;
+  panel.showModal();
   $('#open-memory').setAttribute('aria-expanded','true');
   $('#close-memory').focus({preventScroll:true});
 }
 function closePanel(restoreFocus=true){
   const panel=$('#memory-panel');
-  const wasOpen=panel.classList.contains('open');
-  // Move keyboard focus out of the drawer BEFORE making it inert.
-  if(wasOpen && restoreFocus) $('#open-memory').focus({preventScroll:true});
-  panel.classList.remove('open');
-  $('#memory-backdrop').classList.remove('open');
+  if(!panel.open) return;
+  panel.close();
   $('#open-memory').setAttribute('aria-expanded','false');
-  panel.setAttribute('aria-hidden','true');
-  panel.inert=true;
+  if(restoreFocus) $('#open-memory').focus({preventScroll:true});
 }
 function togglePanel(){
-  if($('#memory-panel').classList.contains('open')) closePanel();
+  if($('#memory-panel').open) closePanel();
   else openPanel();
 }
 function addMessage(text,mine){const m={id:nextId++,text,mine,time:'12:43'};messages.push(m);renderMessages();scrollBottom();return m}
@@ -50,19 +44,18 @@ $('#close-memory').addEventListener('click', event => {
   event.stopPropagation();
   closePanel();
 });
-$('#memory-backdrop').addEventListener('click', event => {
-  if(event.target === $('#memory-backdrop')) closePanel();
-});
-document.addEventListener('keydown',e=>{
+// The modal dialog is in the browser's top layer, above the chat theme button.
+$('#memory-panel').addEventListener('click', event => {
   const panel=$('#memory-panel');
-  if(!panel.classList.contains('open') || document.querySelector('dialog[open]')) return;
-  if(e.key==='Escape'){e.preventDefault();closePanel();return;}
-  if(e.key!=='Tab') return;
-  const focusable=[...panel.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')].filter(el=>el.getClientRects().length);
-  const first=focusable[0], last=focusable[focusable.length-1];
-  if(!first){e.preventDefault();panel.focus();return;}
-  if(e.shiftKey && document.activeElement===first){e.preventDefault();last.focus();}
-  else if(!e.shiftKey && document.activeElement===last){e.preventDefault();first.focus();}
+  if(event.target !== panel) return;
+  const rect=panel.getBoundingClientRect();
+  if(event.clientX < rect.left || event.clientX > rect.right ||
+     event.clientY < rect.top || event.clientY > rect.bottom) closePanel();
+});
+$('#memory-panel').addEventListener('close', () => {
+  $('#open-memory').setAttribute('aria-expanded','false');
+  // Also cover Escape, which the native dialog handles automatically.
+  $('#open-memory').focus({preventScroll:true});
 });
 init();
 
