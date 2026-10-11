@@ -27,13 +27,19 @@
   <h2 id="comparison-title">Earlier concept and final interface</h2>
   <p class="comparison-intro">The earlier concept is reconstructed to demonstrate UX limitations. It is not a recovered historical build or evidence of a prior user test. The final interface is the existing repository design.</p>
   <ul class="comparison-list">
-    <li><b>Finding an item.</b> Earlier: scan the full list. Final: narrow it with category filters.</li>
-    <li><b>Checking context.</b> Earlier: find the message manually. Final: use View original message.</li>
-    <li><b>Reviewing suggestions.</b> Earlier: OK, Change and ×. Final: Confirm, Edit and Dismiss explain the actions.</li>
-    <li><b>Recovering completed items.</b> Earlier: Done removes the item from view. Final: contextual completion labels, a Resolved view and Reopen.</li>
+    <li><b>Theme choice.</b> Earlier: light mode only. Final: a working light/dark toggle that remembers the preference.</li>
+    <li><b>Saving effort.</b> Earlier: choose a group and destination, Continue, then confirm on a second screen. Suggestions also require the editor. Final: useful defaults, one-step suggestion confirmation and a single save form.</li>
+    <li><b>Category clarity.</b> Earlier: Numbers, General, Items, Misc, Other and Notes, with uniform tags. Final: Money, Plans, To-Dos, Recommendations, Dates and Decisions with distinct tags.</li>
+    <li><b>Checking context.</b> Earlier: find the message manually. Final: View original message.</li>
+    <li><b>Completion and recovery.</b> Earlier: Done hides the item with no resolved view. Final: contextual actions, Resolved and Reopen.</li>
   </ul>
-  <p class="comparison-intro">Try the same saved item in both views. Switching preserves your session data; entering Earlier resets filters to active items. Plans versus Dates wording remains an open refinement in both versions.</p>
+  <p class="comparison-intro">Both views use the same session data. Switching resets the current filter, not your memories. These differences support a simulated evaluation; the five example responses are documented in the repository. Plans versus Dates overlap remains a possible refinement, not a claimed fix.</p>
   <button type="button" class="primary full" data-close="comparison-dialog">Try the comparison</button>
 </dialog>
-<script src="app.js"></script><script src="comparison.js"></script></body></html>
+<dialog id="legacy-review-dialog" aria-labelledby="legacy-review-heading">
+  <h2 id="legacy-review-heading">Save this memory?</h2>
+  <p id="legacy-review-title"></p><p>Group: <strong id="legacy-review-group"></strong></p>
+  <p class="modal-note">Review the entry before saving.</p>
+  <div class="modal-actions"><button type="button" class="secondary" id="legacy-back">Go back</button><button type="button" class="primary" id="legacy-save">Confirm save</button></div>
+</dialog><script src="app.js"></script><script src="comparison.js"></script></body></html>
 

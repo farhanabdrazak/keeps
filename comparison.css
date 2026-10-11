@@ -13,7 +13,7 @@
 #comparison-dialog { max-width:650px; max-height:90dvh; overflow:auto; }
 .comparison-list { padding-left:20px; font-size:13px; line-height:1.65; }
 .comparison-list li { margin-bottom:12px; }
-[data-version="earlier"] #filters,
+[data-version="earlier"] #theme-toggle,
 [data-version="earlier"] .status-row label { display:none; }
 [data-theme="dark"] .version-bar { background:#171e2b; }
 [data-theme="dark"] .version-heading span { color:#a9b3c6; }
@@ -25,3 +25,5 @@
   .version-options button { padding:8px 11px; }
   .version-details { margin-left:auto; padding:8px 0; }
 }
+
+[data-version="earlier"] .tag { background:#eef0f4; color:#6c7380; }

@@ -1,18 +1,17 @@
 # Keeps design comparison
 
-The default **Final interface** uses the repository's existing interface and app.js logic. **Earlier concept** is a reconstruction created on 11 October 2026 for an interactive design comparison, not a recovered historical build or evidence of an earlier participant test.
+The default Final interface preserves app.js and style.css from commit ba0523c775c7c1498709ecdcf068beb057bedc2b. Earlier concept is a reconstruction created on 11 October 2026 to illustrate UX limitations for a simulated evaluation, not a recovered historical build.
 
-Switch using the toolbar. The same messages, saved items and suggestion state are retained between views. Entering the earlier concept clears the category filter and returns to active items. Resolving an item there preserves it in data; switch to Final and check Resolved to reopen it. Restart demo resets both views together. Refresh retains the selected version through the URL but restarts the underlying demo, as before.
+## Deliberate differences
 
-| Deliberate limitation in earlier concept | Existing final behaviour | Demonstration |
-| --- | --- | --- |
-| No category filters | Named category filters | Compare scanning all saved items with filtering Plans or Money. |
-| No source-message link | View original message returns to context | Open the coffee card and compare how to verify the arrangement. |
-| Generic OK, Change and × suggestion actions | Confirm, Edit and Dismiss | Compare how clearly the actions communicate their effect. |
-| Generic Done and no resolved-items view | Contextual completion label, Resolved view and Reopen | Complete a card in Earlier, then recover it in Final. |
+- Light mode only in Earlier; Final restores the preferred theme and its toggle.
+- Earlier requires group selection and, for manual capture, destination selection on each new save. Continue opens a second confirmation dialog. Even OK on a suggestion opens the editor. Final retains its original defaults, direct suggestion confirmation and single-form save.
+- Earlier labels the six categories Numbers, General, Items, Misc, Other and Notes with identical tag styling. Final uses the original descriptive names and colours. The underlying category values stay unchanged so switching does not corrupt saved records.
+- Earlier omits source links. Final has View original message.
+- Earlier uses Done with no resolved-items view. Final offers contextual completion, Resolved and Reopen.
 
-These differences illustrate design tradeoffs related to the supplied report's feedback themes. They are not claims that these exact limitations were observed in a real prior study. The report describes its evaluation sessions as created for the proof-of-concept exercise. Plans versus Dates wording, multi-category items, reminders and suggestion undo are not claimed as final fixes because the baseline repository does not implement them.
+Five fictional responses and their relationship to these differences are in [SIMULATED_USER_FEEDBACK.md](SIMULATED_USER_FEEDBACK.md). These are examples for a theoretical evaluation, not new findings from recruited users. The supplied report's comparison was ordinary chat versus Keeps; it must not be relabelled as this Earlier-versus-Final study.
 
-Files: `comparison.js` adds the mode behaviour; `comparison.css` styles the toolbar and earlier-only visibility. `index.html` includes the toolbar, explanation dialog and the two assets. `app.js` and `style.css` are unchanged.
+Switching preserves session data but returns to All and active items. Restart demo resets both views. Refresh retains the selected version via the URL but restarts the session. Direct link: `?version=earlier`. Theme preference is independent of version and is not overwritten by the light-only reconstruction.
 
-Direct links: `?version=earlier` opens the reconstructed concept; the normal URL opens Final. Theme selection remains independent of the version.
+The implementation is isolated in comparison.js and comparison.css plus the comparison toolbar/dialogs in index.html. app.js and style.css remain unchanged. Plans versus Dates overlap, live AI accuracy, real sharing, reminders and automatic stale-record detection are not claimed as fixed.
