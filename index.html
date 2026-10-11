@@ -6,7 +6,7 @@
   if (theme !== 'dark' && theme !== 'light') theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   document.documentElement.dataset.theme = theme;
 })();
-</script><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="comparison.css"></head><body>
+</script><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="comparison.css?v=2"></head><body>
 <section class="version-bar" aria-label="Design version comparison">
   <div class="version-heading"><strong>Keeps design comparison</strong><span id="version-status" role="status">Final interface · Current repository design</span></div>
   <div class="version-options" role="group" aria-label="Interface version">
@@ -41,5 +41,5 @@
   <p id="legacy-review-title"></p><p>Group: <strong id="legacy-review-group"></strong></p>
   <p class="modal-note">Review the entry before saving.</p>
   <div class="modal-actions"><button type="button" class="secondary" id="legacy-back">Go back</button><button type="button" class="primary" id="legacy-save">Confirm save</button></div>
-</dialog><script src="app.js"></script><script src="comparison.js"></script></body></html>
+</dialog><script src="app.js"></script><script src="comparison.js?v=2"></script></body></html>
 
