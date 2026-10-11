@@ -4,6 +4,8 @@
   const buttons = [...document.querySelectorAll('.version-options [data-version]')];
   const status = document.querySelector('#version-status');
   const categorySelect = document.querySelector('#memory-category');
+  // Explicit values keep renamed labels from changing the stored category.
+  [...categorySelect.options].forEach(option => { option.value = option.value; });
   const scopeSelect = document.querySelector('#memory-scope');
   const editor = document.querySelector('#edit-dialog');
   const review = document.querySelector('#legacy-review-dialog');
