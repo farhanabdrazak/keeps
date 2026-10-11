@@ -39,3 +39,45 @@
 .feedback-examples blockquote { font-size:13px; line-height:1.65; margin:9px 0; padding-left:12px; border-left:2px solid #9baeff; }
 .feedback-examples p { font-size:12px; line-height:1.55; margin:0; color:var(--muted); }
 [data-theme="dark"] .feedback-disclosure summary { background:#263553; }
+
+/* In BOTH versions Shared Memory is an optional overlay, not a permanent column. */
+.app { grid-template-columns:270px minmax(0,1fr); }
+.memory-backdrop {
+  position:fixed;
+  top:var(--version-bar-height,0px);
+  bottom:0;
+  left:max(0px,calc((100vw - 1680px)/2));
+  right:max(0px,calc((100vw - 1680px)/2));
+  z-index:20;
+  background:rgba(16,25,45,.34);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .25s ease, visibility .25s ease;
+}
+.memory-backdrop.open { opacity:1; visibility:visible; pointer-events:auto; }
+.memory-panel {
+  position:fixed;
+  top:var(--version-bar-height,0px);
+  bottom:0;
+  right:max(0px,calc((100vw - 1680px)/2));
+  width:min(390px,100vw);
+  z-index:21;
+  transform:translateX(110%);
+  visibility:hidden;
+  pointer-events:none;
+  box-shadow:-18px 0 55px rgba(22,36,72,.17);
+  transition:transform .28s cubic-bezier(.2,.8,.2,1), visibility .28s;
+}
+.memory-panel.open { transform:translateX(0); visibility:visible; pointer-events:auto; }
+.panel-head .icon-button { display:grid; }
+.toast { z-index:30; }
+@media(min-width:1400px){ .app { grid-template-columns:285px minmax(0,1fr); } }
+@media(max-width:1100px){ .app { grid-template-columns:220px minmax(0,1fr); } }
+@media(max-width:620px){
+  .app { display:flex; }
+  .memory-panel { width:min(100vw,390px); }
+}
+@media(prefers-reduced-motion:reduce){
+  .memory-backdrop,.memory-panel { transition:none; }
+}
