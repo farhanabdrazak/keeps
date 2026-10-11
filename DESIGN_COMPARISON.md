@@ -15,3 +15,5 @@ Five fictional responses and their relationship to these differences are in [SIM
 Switching preserves session data but returns to All and active items. Restart demo resets both views. Refresh retains the selected version via the URL but restarts the session. Direct link: `?version=earlier`. Theme preference is independent of version and is not overwritten by the light-only reconstruction.
 
 The implementation is isolated in comparison.js and comparison.css plus the comparison toolbar/dialogs in index.html. app.js and style.css remain unchanged. Plans versus Dates overlap, live AI accuracy, real sharing, reminders and automatic stale-record detection are not claimed as fixed.
+
+The app’s **What changed?** dialog also has an expandable section containing the same five hypothetical feedback examples and their linked final-design fixes, so the iteration narrative can be demonstrated within the web app itself. The notes remain clearly identified as illustrative rather than empirical user-test results.
