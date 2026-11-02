@@ -207,3 +207,105 @@
   .buddy-copy strong{font-size:11px}
   [data-version="final"] .demo-banner button{font-size:9px;padding:6px}
 }
+
+
+/* --- Kip in-message suggestion prompt --- */
+[data-version="final"] #suggestion{display:none!important}
+.kip-message-prompt{display:none}
+[data-version="final"] .kip-message-prompt{
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  max-width:min(390px,88%);
+  margin:0 0 8px 2px;
+  animation:kipFloatIn .34s cubic-bezier(.2,.8,.2,1);
+  position:relative;
+  z-index:2;
+}
+[data-version="final"] .message.mine .kip-message-prompt{
+  align-self:flex-end;
+  flex-direction:row-reverse;
+  margin-left:auto;
+  margin-right:2px;
+}
+.kip-message-face{
+  width:38px;height:35px;flex:0 0 38px;
+  position:relative;
+  border-radius:13px 13px 11px 15px;
+  background:linear-gradient(145deg,#8f7cf6,#6e8df7);
+  box-shadow:0 7px 16px rgba(82,76,174,.2);
+  transform:rotate(-5deg);
+}
+.kip-message-face:before{
+  content:"";position:absolute;width:2px;height:8px;background:#7373da;left:19px;top:-6px;
+}
+.kip-message-face:after{
+  content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:#f4a9c6;left:17px;top:-10px;
+}
+.kip-message-face span,.kip-message-face i{
+  position:absolute;top:13px;width:4px;height:6px;border-radius:50%;background:white;
+}
+.kip-message-face span{left:10px}.kip-message-face i{right:10px}
+.kip-message-face b{
+  position:absolute;left:14px;top:23px;width:9px;height:4px;border-bottom:2px solid white;border-radius:0 0 8px 8px;
+}
+.kip-message-bubble{
+  position:relative;
+  min-width:220px;
+  max-width:330px;
+  padding:11px 12px 10px;
+  background:linear-gradient(145deg,#fff,#faf8ff);
+  border:1px solid #ded8ff;
+  border-radius:15px 15px 15px 5px;
+  box-shadow:0 8px 24px rgba(55,55,105,.10);
+}
+.message.mine .kip-message-bubble{border-radius:15px 15px 5px 15px}
+.kip-message-bubble:after{
+  content:"";position:absolute;left:-6px;bottom:9px;width:10px;height:10px;
+  background:#fbf9ff;border-left:1px solid #ded8ff;border-bottom:1px solid #ded8ff;
+  transform:rotate(45deg);
+}
+.message.mine .kip-message-bubble:after{
+  left:auto;right:-6px;border-left:0;border-bottom:0;border-right:1px solid #ded8ff;border-top:1px solid #ded8ff;
+}
+.kip-message-label{
+  display:block;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8d80cf;margin-bottom:2px;
+}
+.kip-message-bubble strong{
+  display:block;font-size:13px;font-weight:650;color:#3f4962;line-height:1.3;
+}
+.kip-message-detail{
+  display:block;font-size:11px;color:#7d8699;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.kip-message-actions{display:flex;gap:5px;margin-top:9px}
+.kip-message-actions button{
+  padding:6px 9px;border-radius:8px;font-size:10px;font-weight:600;background:#f0eefc;color:#6658bd;
+}
+.kip-message-actions button:first-child{background:#6f62dc;color:white}
+.kip-message-actions button:last-child{background:transparent;color:#8b93a3}
+[data-version="final"] .message.has-kip-prompt .bubble{
+  box-shadow:0 0 0 2px rgba(143,124,246,.16);
+}
+@keyframes kipFloatIn{
+  from{opacity:0;transform:translateY(8px) scale(.98)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+[data-theme="dark"][data-version="final"] .kip-message-bubble{
+  background:linear-gradient(145deg,#25283b,#211f31);
+  border-color:#4b456e;
+}
+[data-theme="dark"] .kip-message-bubble:after{background:#242438;border-color:#4b456e}
+[data-theme="dark"] .kip-message-bubble strong{color:#eef0fa}
+[data-theme="dark"] .kip-message-detail{color:#aeb6c9}
+[data-theme="dark"] .kip-message-actions button{background:#37324f;color:#c8bfff}
+[data-theme="dark"] .kip-message-actions button:first-child{background:#7668e8;color:white}
+[data-theme="dark"] .kip-message-actions button:last-child{background:transparent;color:#aab2c4}
+@media(max-width:620px){
+  [data-version="final"] .kip-message-prompt{max-width:94%;gap:6px}
+  .kip-message-face{width:32px;height:30px;flex-basis:32px;border-radius:11px}
+  .kip-message-face span,.kip-message-face i{top:11px}
+  .kip-message-face span{left:8px}.kip-message-face i{right:8px}
+  .kip-message-face b{left:12px;top:20px}
+  .kip-message-bubble{min-width:0;max-width:290px;padding:10px}
+  .kip-message-actions button{padding:6px 8px}
+}
