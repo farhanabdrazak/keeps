@@ -127,3 +127,6 @@ dialog.memory-panel .panel-head .icon-button:hover { background:rgba(120,137,170
 @keyframes keeps-drawer-enter { from{ opacity:.75; transform:translateX(22px); } to{ opacity:1; transform:translateX(0); } }
 @media(max-width:620px){ dialog.memory-panel { right:0; width:min(100vw,390px); padding-top:24px; } }
 @media(prefers-reduced-motion:reduce){ dialog.memory-panel[open] { animation:none; } }
+
+/* Kip is intentionally a Final-interface personality improvement. */
+html[data-version="earlier"] .buddy-shell{display:none!important}
