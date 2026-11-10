@@ -1,0 +1,52 @@
+.scenario-row #open-plans { margin-left:auto; border-color:var(--blue); color:var(--blue); font-weight:600; }
+#open-plans[hidden] { display:none; }
+#plan-board { width:calc(100% - 24px); max-width:1000px; max-height:90dvh; padding:24px; overflow-y:auto; }
+.plan-heading,.plan-title-row { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+.plan-heading h2 { margin:5px 0; font-size:27px; }
+.plan-heading p { font-size:13px; color:var(--muted); margin:6px 0; }
+.plan-heading>button { font-size:28px; }
+.plan-demo-note { font-size:11px; padding:9px 12px; background:#eef2fc; border-radius:8px; color:#536381; }
+.plan-layout { display:grid; grid-template-columns:220px minmax(0,1fr); gap:24px; }
+.plan-navigation nav { display:grid; gap:6px; margin-top:18px; }
+.plan-navigation nav button { text-align:left; padding:12px; border-radius:9px; overflow-wrap:anywhere; }
+.plan-navigation nav [aria-current="page"] { background:#eaf0ff; color:var(--blue); }
+#plan-board small { display:block; color:var(--muted); font-size:10px; line-height:1.5; }
+#plan-board label { margin-top:8px; }
+#plan-board input,#plan-board select { font-size:12px; padding:9px; margin-top:5px; min-width:0; }
+#plan-board button { font-size:12px; }
+#plan-board .plan-heading>button { font-size:28px; }
+.plan-inline { display:flex; gap:6px; align-items:center; }
+.plan-inline input { width:100%; }
+.plan-inline button,.plan-add-row button,.plan-section form>button,.plan-title-row button { background:var(--blue); color:white; padding:9px 12px; border-radius:8px; margin-top:6px; }
+.plan-title-row h3 { margin:8px 0; font-size:22px; overflow-wrap:anywhere; }
+.plan-title-row button { flex-shrink:0; }
+.plan-stats { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+.plan-stats span { background:#f1f4fa; border-radius:8px; padding:9px 12px; font-size:11px; }
+.plan-stats b { display:block; font-size:16px; margin-bottom:3px; }
+.plan-section { border-top:1px solid var(--border); padding:16px 0; }
+.plan-section h4 { margin:0 0 10px; font-size:15px; }
+.plan-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.plan-add-row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.plan-add-row input { flex:1 1 130px; width:130px; }
+.plan-add-row input[type="number"] { flex:0 1 90px; width:90px; }
+.plan-add-row select { flex:1 1 100px; width:100px; }
+.plan-muted { font-size:12px; line-height:1.6; color:var(--muted); }
+.plan-task,.plan-cost { display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); padding:10px 0; font-size:12px; }
+.plan-task label { display:flex; flex:1; gap:8px; align-items:center; margin:0!important; }
+#plan-board input[type="checkbox"] { width:16px; height:16px; flex-shrink:0; margin:0; accent-color:var(--blue); }
+.task-done { text-decoration:line-through; color:var(--muted); }
+.plan-owner { font-size:10px; padding:4px 7px; border-radius:10px; background:#edf1fb; }
+.plan-cost>span { flex:1; }
+.plan-balances { background:#f3f6fc; border-radius:10px; padding:8px 12px; margin:12px 0; }
+.plan-balances>div { display:flex; justify-content:space-between; gap:12px; padding:6px 0; font-size:12px; }
+.plan-linked { max-height:230px; overflow:auto; }
+.plan-linked>div { display:flex; align-items:center; gap:8px; padding:9px 0; border-bottom:1px solid var(--border); }
+.plan-linked label { display:flex; gap:10px; flex:1; margin:0!important; align-items:center; font-size:12px; }
+.plan-linked button { color:var(--blue); flex-shrink:0; }
+.plan-empty { text-align:center; max-width:380px; margin:50px auto; font-size:14px; line-height:1.7; color:var(--muted); }
+.plan-empty>span { font-size:45px; color:var(--blue); }
+.plan-section progress { width:100%; height:6px; accent-color:var(--blue); }
+.message-memory-card>span { white-space:pre-line; }
+[data-theme="dark"] .plan-demo-note,[data-theme="dark"] .plan-stats span,[data-theme="dark"] .plan-owner,[data-theme="dark"] .plan-balances,[data-theme="dark"] .plan-navigation nav [aria-current="page"] { background:#29344c; color:#d2dcf2; }
+[data-theme="dark"] #plan-board form button,[data-theme="dark"] .plan-title-row button { background:#3158e7; color:white; }
+@media(max-width:680px) { #plan-board { padding:16px; } .plan-layout { grid-template-columns:1fr; gap:16px; } .plan-navigation nav { display:flex; overflow:auto; margin-top:10px; } .plan-navigation nav button { min-width:130px; } .plan-grid { grid-template-columns:1fr; gap:0; } .plan-title-row { flex-wrap:wrap; gap:4px; } }
