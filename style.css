@@ -317,3 +317,14 @@
   box-shadow:inset 0 0 0 1px #454361;
   color:#e7ecf5;
 }
+
+/* Match the final Shared memory control to the active dark theme. */
+[data-theme="dark"][data-version="final"] .memory-toggle {
+  background:linear-gradient(135deg,#293653,#302940);
+  border-color:#465b8b;
+  color:#c4ceff;
+}
+[data-theme="dark"][data-version="final"] .memory-toggle:hover {
+  background:linear-gradient(135deg,#344363,#3b3450);
+  border-color:#657ba8;
+}
