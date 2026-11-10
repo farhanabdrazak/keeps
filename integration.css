@@ -33,3 +33,7 @@
 .message-memory-card small { color:var(--muted); }
 [data-theme="dark"] #memory-attachment-draft { background:#1d2635; }
 [data-theme="dark"] .message-memory-card { background:#29344c; color:#e7ecf5; }
+
+#recall-disclosure summary { cursor:pointer; font-size:12px; font-weight:600; }
+#recall-disclosure[open] summary { margin-bottom:8px; }
+#recall-disclosure summary:focus-visible { outline:3px solid #9baeff; outline-offset:3px; border-radius:3px; }
