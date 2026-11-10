@@ -1,6 +1,6 @@
 /* Fictional walkthrough records. Add once; preserve existing user records. */
 (() => {
- const marker='keeps-walkthrough-v1',planId='walkthrough-saturday';
+ const marker='keeps-walkthrough-v2',planId='walkthrough-saturday';
  function load(){
   const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))||fallback;}catch{return fallback;}};
   const people=read('keeps-people-v1',{people:['You','Jamie Lim'],viewer:'You',inbox:[]});
@@ -19,7 +19,10 @@
    [900002,900011,'Lunch reservation for three','Plans','Garden Table · 12 PM · Jamie booked · DEMO-LUNCH-314','I booked Garden Table for three at 12. Reference DEMO-LUNCH-314. Lunch is $60 altogether.'],
    [900003,900012,'Gallery tickets confirmed','Plans','Colour & Light · 2 PM · 3 tickets · DEMO-ART-208','Gallery tickets are sorted! Three tickets for Colour & Light at 2 PM, $96 total. Ref DEMO-ART-208.'],
    [900004,900013,'Shared outing costs','Money','Tickets $96 · Lunch $60 · Taxi $24 · Split equally','Let’s split tickets, lunch and the $24 taxi equally. We can keep the costs together with the outing plan.']];
-  for(const [source,id,title,category,detail,text] of records){if(!convo.messages.some(m=>m.id===source))convo.messages.push({id:source,text,mine:source===900003,time:'10:'+String(source-899950)});if(!convo.memories.some(m=>m.id===id))convo.memories.push({id,title,category,detail,scope:'shared',source,resolved:false});}
+  for(const [source,id,title,category,detail,text] of records){if(!convo.messages.some(m=>m.id===source))convo.messages.push({id:source,text,mine:source===900003,time:'10:'+String(source-899950)});if(id!==900010&&!convo.memories.some(m=>m.id===id))convo.memories.push({id,title,category,detail,scope:'shared',source,resolved:false});}
+  const starterMemoryIds=convo.memories.filter(m=>m.source===900001).map(m=>m.id);
+  convo.memories=convo.memories.filter(m=>m.source!==900001);
+  const outing=plans.find(p=>p.id===planId);if(outing){outing.memories=outing.memories.filter(id=>id!==900010&&!starterMemoryIds.includes(id));delete outing.originMemory;outing.itinerary=outing.itinerary.filter(x=>x.id!=='demo-stop-1'&&x.sourceMessage!==900001);}
   convo.nextId=Math.max(convo.nextId||20,900100);
   localStorage.setItem('keeps-people-v1',JSON.stringify(people));localStorage.setItem('keeps-plans-v1',JSON.stringify(plans));localStorage.setItem('keeps-conversation-v1',JSON.stringify(convo));localStorage.setItem(marker,'loaded');
  }
