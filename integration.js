@@ -5,8 +5,17 @@
  const final=()=>document.documentElement.dataset.version!=='earlier';
  const base={renderMemories,renderMessages,init};
  const ui=document.createElement('section'); ui.className='context-tools';
- ui.innerHTML='<div id="followup-strip" aria-live="polite"></div><details id="recall-disclosure" open><summary>Bring a memory into this reply</summary><div class="recall-row"><input id="recall-query" type="search" aria-label="Search saved memories" placeholder="Search saved plans, amounts or tasks…"><button id="recall-toggle" type="button">Browse saved</button></div><div id="recall-results" hidden></div></details><small id="local-note">Demo stays in this browser. Follow-ups appear while Keeps is open; no background alerts.</small>';
+ ui.innerHTML='<div id="followup-strip" aria-live="polite"></div>';
  document.querySelector('.composer-area').prepend(ui);
+ const picker=document.createElement('dialog');picker.id='memory-picker';picker.setAttribute('aria-labelledby','memory-picker-title');
+ picker.innerHTML='<div class="picker-header"><div><h2 id="memory-picker-title">Attach a memory</h2><p>Choose a saved detail to send with your message.</p></div><button type="button" id="close-memory-picker" aria-label="Close memory picker">×</button></div><input id="recall-query" type="search" aria-label="Search saved memories" placeholder="Search memories or people…"><div id="recall-results"></div><small id="local-note">Saved in this browser. Follow-ups appear while Keeps is open.</small>';
+ document.body.append(picker);
+ const attachButton=document.createElement('button');attachButton.type='button';attachButton.id='attach-memory';attachButton.setAttribute('aria-label','Attach a memory');attachButton.title='Attach a memory';attachButton.setAttribute('aria-haspopup','dialog');attachButton.setAttribute('aria-controls','memory-picker');attachButton.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 4h12v17l-6-4-6 4V4Z"/><path d="M9 8h6M9 11h6"/></svg>';
+ document.querySelector('#send-form').prepend(attachButton);
+ attachButton.onclick=()=>{recall();picker.showModal();document.querySelector('#recall-query').focus();};
+ document.querySelector('#close-memory-picker').onclick=()=>picker.close();
+ picker.addEventListener('click',event=>{if(event.target!==picker)return;const r=picker.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)picker.close();});
+ picker.addEventListener('close',()=>document.querySelector('#message-input').focus());
  const attachmentDraft=document.createElement('div');attachmentDraft.id='memory-attachment-draft';attachmentDraft.setAttribute('aria-live','polite');
  document.querySelector('#send-form').before(attachmentDraft);
  const dialog=document.createElement('dialog'); dialog.id='followup-dialog'; dialog.setAttribute('aria-labelledby','followup-heading');
@@ -17,9 +26,10 @@
  const peopleLine=id=>namesFor(id).length?`People: ${namesFor(id).join(", ")}`:"";
  function persist(){if(!ready)return;try{localStorage.setItem(key,JSON.stringify({messages,memories,suggestion,nextId,followups}));}catch{document.querySelector('#local-note').textContent='Browser storage unavailable. Changes will last only for this visit.';}}
  function render(){
-  ui.hidden=!final();
+  attachButton.hidden=!final();
+  if(!final()&&picker.open)picker.close();
   attachmentDraft.hidden=!pendingMemoryAttachment;
-  attachmentDraft.innerHTML=pendingMemoryAttachment?`<div class="attachment-draft-heading"><span>Memory attached · sends with your message</span><button type="button" id="remove-memory-attachment" aria-label="Remove attached memory">×</button></div>${memoryAttachmentMarkup(pendingMemoryAttachment)}`:'';
+  attachmentDraft.innerHTML=pendingMemoryAttachment?`<div class="attachment-draft-heading"><span>Memory attached</span><button type="button" id="remove-memory-attachment" aria-label="Remove attached memory">×</button></div>${memoryAttachmentMarkup(pendingMemoryAttachment)}`:'';
   document.querySelectorAll('.memory-integrations,.reminder-people,.saved-message-link').forEach(e=>e.remove());
   if(final()){
    document.querySelectorAll('#memory-list [data-edit]').forEach(button=>{
@@ -41,6 +51,7 @@
   }
   const due=memories.filter(m=>!m.resolved&&followups[m.id]&&Date.parse(followups[m.id].when)<=Date.now());
   document.querySelector('#followup-strip').innerHTML=due.length?`<strong>${due.length} follow-up${due.length===1?'':'s'} ready</strong>`+due.slice(0,3).map(m=>`<button data-find-memory="${m.id}">${esc(m.title)}${peopleLine(m.id)?`<span class="due-people">${esc(peopleLine(m.id))}</span>`:""}</button>`).join(''):'';
+  ui.hidden=!final()||!due.length;
   recall();persist();
  }
  function recall(){
@@ -59,14 +70,13 @@
  }catch{}
  ready=true;renderMessages();renderSuggestion();renderMemories();
  document.querySelector('#recall-query').addEventListener('input',()=>{document.querySelector('#recall-results').hidden=false;recall();});
- document.querySelector('#recall-toggle').addEventListener('click',()=>{const r=document.querySelector('#recall-results');r.hidden=!r.hidden;recall();});
  document.querySelector('#followup-cancel').onclick=()=>dialog.close();
  document.querySelector('#followup-remove').onclick=()=>{delete followups[editingId];dialog.close();renderMemories();};
  document.querySelector('#followup-form').onsubmit=e=>{e.preventDefault();const date=new Date(document.querySelector('#followup-time').value);if(!Number.isFinite(date.getTime()))return;followups[editingId]={when:date.toISOString(),people:KeepsFollowups.people(document.querySelector('#followup-people').value)};dialog.close();renderMemories();notify('Follow-up set. It will appear here when due.');};
  document.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;if(!final()&&b.id!=='remove-memory-attachment')return;
   if(b.id==='remove-memory-attachment'){pendingMemoryAttachment=null;render();document.querySelector('#message-input').focus();}
-  if(b.dataset.reuse){const m=get(b.dataset.reuse);if(!m)return;closePanel(false);document.querySelector('#recall-disclosure').open=false;document.querySelector('#recall-results').hidden=true;document.querySelector('#recall-query').value='';pendingMemoryAttachment={title:m.title,detail:m.detail||'',category:m.category,people:namesFor(m.id).join(', ')};render();document.querySelector('#message-input').focus();notify('Memory attached. Add a message or send the card on its own.');}
+  if(b.dataset.reuse){const m=get(b.dataset.reuse);if(!m)return;closePanel(false);if(picker.open)picker.close();document.querySelector('#recall-query').value='';pendingMemoryAttachment={title:m.title,detail:m.detail||'',category:m.category,people:namesFor(m.id).join(', ')};render();document.querySelector('#message-input').focus();notify('Memory attached. Add a message or send the card on its own.');}
   if(b.dataset.findMemory){const m=get(b.dataset.findMemory);if(!m)return;scope=m.scope;category=m.category;document.querySelector('#show-resolved').checked=m.resolved;renderMemories();openPanel();}
   if(b.dataset.followup){editingId=Number(b.dataset.followup);const m=get(editingId);if(!m)return;document.querySelector('#followup-name').textContent=m.title;const d=followups[editingId]?new Date(followups[editingId].when):new Date(Date.now()+3600000);document.querySelector('#followup-time').value=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);document.querySelector('#followup-people').value=namesFor(editingId).join(', ');document.querySelector('#followup-remove').hidden=!followups[editingId];dialog.showModal();}
   if(b.dataset.calendar){const m=get(b.dataset.calendar);if(!m||!followups[m.id])return;const content=KeepsFollowups.calendar(m,followups[m.id]);const url=URL.createObjectURL(new Blob([content],{type:'text/calendar;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='keeps-followup.ics';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify('Calendar file downloaded. Open it in your calendar to import.');}

@@ -37,3 +37,29 @@
 #recall-disclosure summary { cursor:pointer; font-size:12px; font-weight:600; }
 #recall-disclosure[open] summary { margin-bottom:8px; }
 #recall-disclosure summary:focus-visible { outline:3px solid #9baeff; outline-offset:3px; border-radius:3px; }
+
+/* Composer tools occupy no extra row; the searchable picker lives in a dialog. */
+.context-tools { border:0; border-radius:0; padding:0; margin:0; background:transparent; }
+[data-theme="dark"] .context-tools { background:transparent; }
+#followup-strip { flex-wrap:nowrap; overflow-x:auto; max-height:56px; margin-bottom:8px; }
+#followup-strip strong,#followup-strip button { flex-shrink:0; }
+#followup-strip button { max-width:220px; }
+.composer #attach-memory { width:34px; height:34px; flex:0 0 34px; padding:5px; border-radius:8px; background:transparent; color:var(--blue); }
+.composer #attach-memory:hover { background:#edf1fc; }
+.composer #attach-memory[hidden] { display:none; }
+[data-theme="dark"] .composer #attach-memory { background:transparent; color:var(--blue); }
+[data-theme="dark"] .composer #attach-memory:hover { background:#29344c; }
+#memory-picker { padding:20px; max-width:440px; max-height:75dvh; overflow:hidden; }
+#memory-picker[open] { display:flex; flex-direction:column; gap:12px; }
+.picker-header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+#memory-picker h2 { font-size:20px; margin:0 0 5px; }
+.picker-header p { margin:0; font-size:12px; color:var(--muted); line-height:1.5; }
+#close-memory-picker { font-size:24px; padding:0 7px; }
+#memory-picker #recall-query { margin:0; flex-shrink:0; }
+#memory-picker #recall-results { max-height:none; min-height:0; overflow-y:auto; margin:0; }
+#memory-picker #recall-results button { padding:8px; border:1px solid var(--border); border-radius:7px; color:var(--blue); font-size:11px; }
+#memory-picker #recall-results small { display:block; color:var(--muted); font-size:11px; line-height:1.4; margin-top:4px; }
+#memory-picker #local-note { font-size:10px; color:var(--muted); line-height:1.4; }
+#memory-attachment-draft { padding:6px 10px; }
+#memory-attachment-draft .message-memory-card { padding:6px 9px; gap:2px; }
+#memory-attachment-draft .message-memory-card>span:not(.memory-card-label) { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
