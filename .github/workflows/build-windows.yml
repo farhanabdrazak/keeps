@@ -1,0 +1,45 @@
+name: Build Keeps Windows EXE
+on:
+  push:
+    branches: [main]
+    paths: ['desktop/**', '*.js', '*.css', '*.html', '*.svg', '.github/workflows/build-windows.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install packaging dependencies
+        run: npm install --no-audit --no-fund
+      - name: Check desktop entry
+        run: node --check main.cjs
+      - name: Build portable executable
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npm run build:win
+      - name: Check executable and write checksum
+        shell: pwsh
+        run: |
+          $exe = Get-Item release/Keeps-1.0.0-Windows-x64.exe
+          $bytes = [System.IO.File]::ReadAllBytes($exe.FullName)
+          if ($bytes[0] -ne 77 -or $bytes[1] -ne 90) { throw 'Invalid executable header' }
+          $hash = (Get-FileHash $exe.FullName -Algorithm SHA256).Hash
+          "$hash  $($exe.Name)" | Out-File release/SHA256SUMS.txt -Encoding ascii
+          Copy-Item README.txt release/README.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Keeps-Windows-x64
+          path: |
+            desktop/release/Keeps-1.0.0-Windows-x64.exe
+            desktop/release/README.txt
+            desktop/release/SHA256SUMS.txt
+          retention-days: 30
