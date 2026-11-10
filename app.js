@@ -22,7 +22,7 @@ function renderMessages(){
   }).join('')
 }
 function renderSuggestion(){ $('#suggestion').innerHTML=suggestion?`<div class="suggestion-top"><span class="mini-kip">✦</span> Kip spotted this <span class="tag ${esc(suggestion.category)}">${esc(suggestion.category)}</span></div><h3>${esc(suggestion.title)}</h3><p>${esc(suggestion.detail)}</p><div class="suggestion-actions"><button class="primary" id="confirm-suggestion">✓ Keep it</button><button class="secondary" id="edit-suggestion">Tweak</button><button class="dismiss" id="dismiss-suggestion">Not this one</button></div>`:''}
-function renderMemories(){const active=memories.filter(m=>m.scope==='shared'&&!m.resolved).length;$('#header-count').textContent=active;$('#shared-count').textContent=memories.filter(m=>m.scope==='shared').length;$('#private-count').textContent=memories.filter(m=>m.scope==='private').length;document.querySelectorAll('[data-scope]').forEach(b=>b.classList.toggle('active',b.dataset.scope===scope));$('#scope-note').textContent=scope==='shared'?'Confirmed together, kept in one place.':'A little space for things only you want to keep.';$('#privacy-note').textContent=scope==='shared'?'Shared items are visible to you and Jamie in this demo.':'Remembered items are private to you in this demo.';$('#filters').innerHTML=categories.map(c=>`<button class="${c===category?'active':''}" data-filter="${c}">${c}</button>`).join('');const resolved=$('#show-resolved').checked;const items=memories.filter(m=>m.scope===scope&&(category==='All'||m.category===category)&&m.resolved===resolved);$('#items-label').textContent=`${items.length} ${resolved?'resolved':'active'} memor${items.length===1?'y':'ies'}`;$('#memory-list').innerHTML=items.length?items.map(m=>`<article class="memory-card ${m.resolved?'resolved':''}"><div class="card-top"><span class="tag ${esc(m.category)}">${esc(m.category)}</span><button class="icon-button" data-edit="${m.id}" aria-label="Edit ${esc(m.title)}" title="Edit memory">⋯</button></div><h3>${esc(m.title)}</h3><p>${esc(m.detail)||'No extra details'}</p><button class="source-button" data-source="${m.source}">↳ View original message</button><div class="card-action"><span>${scope==='shared'?'Shared with Jamie':'Only you'}</span><button data-resolve="${m.id}">${m.resolved?'↶ Reopen':m.category==='Money'?'✓ Mark paid':m.category==='Recommendations'?'✓ Mark tried':'✓ Complete'}</button></div></article>`).join(''):`<div class="empty"><b>${resolved?'Nothing resolved yet':scope==='private'&&category==='All'?'Keep a little something.':'All clear here.'}</b>${scope==='private'&&!resolved?'Click a chat message to save it privately.':resolved?'Completed memories will appear here.':'Try another category or confirm a suggestion in the chat.'}</div>`}
+function renderMemories(){const active=memories.filter(m=>m.scope==='shared'&&!m.resolved).length;$('#header-count').textContent=active;$('#shared-count').textContent=memories.filter(m=>m.scope==='shared').length;$('#private-count').textContent=memories.filter(m=>m.scope==='private').length;document.querySelectorAll('[data-scope]').forEach(b=>b.classList.toggle('active',b.dataset.scope===scope));$('#scope-note').textContent=scope==='shared'?'Saved in this conversation. Sharing is simulated.':'A little space for things only you want to keep.';$('#privacy-note').textContent=scope==='shared'?'Shared items are visible to you and Jamie in this demo.':'Remembered items are private to you in this demo.';$('#filters').innerHTML=categories.map(c=>`<button class="${c===category?'active':''}" data-filter="${c}">${c}</button>`).join('');const resolved=$('#show-resolved').checked;const items=memories.filter(m=>m.scope===scope&&(category==='All'||m.category===category)&&m.resolved===resolved);$('#items-label').textContent=`${items.length} ${resolved?'resolved':'active'} memor${items.length===1?'y':'ies'}`;$('#memory-list').innerHTML=items.length?items.map(m=>`<article class="memory-card ${m.resolved?'resolved':''}"><div class="card-top"><span class="tag ${esc(m.category)}">${esc(m.category)}</span><button class="icon-button" data-edit="${m.id}" aria-label="Edit ${esc(m.title)}" title="Edit memory">⋯</button></div><h3>${esc(m.title)}</h3><p>${esc(m.detail)||'No extra details'}</p><button class="source-button" data-source="${m.source}">↳ View original message</button><div class="card-action"><span>${scope==='shared'?'Shared with Jamie':'Only you'}</span><button data-resolve="${m.id}">${m.resolved?'↶ Reopen':m.category==='Money'?'✓ Mark paid':m.category==='Recommendations'?'✓ Mark tried':'✓ Complete'}</button></div></article>`).join(''):`<div class="empty"><b>${resolved?'Nothing resolved yet':scope==='private'&&category==='All'?'Keep a little something.':'All clear here.'}</b>${scope==='private'&&!resolved?'Click a chat message to save it privately.':resolved?'Completed memories will appear here.':'Try another category or confirm a suggestion in the chat.'}</div>`}
 function notify(t){clearTimeout(toastTimer);$('#toast').textContent=t;$('#toast').classList.add('show');toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3000)}
 function buddySay(message,mood='happy'){
   const buddy=$('#keeps-buddy'),copy=$('#buddy-message');
@@ -45,6 +45,7 @@ function openPanel(){
 function closePanel(restoreFocus=true){
   const panel=$('#memory-panel');
   if(!panel.open) return;
+  panel.dataset.restoreFocus=String(restoreFocus);
   panel.close();
   $('#open-memory').setAttribute('aria-expanded','false');
   if(restoreFocus) $('#open-memory').focus({preventScroll:true});
@@ -82,7 +83,8 @@ $('#memory-panel').addEventListener('click', event => {
 $('#memory-panel').addEventListener('close', () => {
   $('#open-memory').setAttribute('aria-expanded','false');
   // Also cover Escape, which the native dialog handles automatically.
-  $('#open-memory').focus({preventScroll:true});
+  if ($('#memory-panel').dataset.restoreFocus !== 'false') $('#open-memory').focus({preventScroll:true});
+  delete $('#memory-panel').dataset.restoreFocus;
 });
 init();
 buddySay('I spotted something worth keeping. Want a hand?','happy');
@@ -114,3 +116,4 @@ window.addEventListener('storage', event => {
     applyTheme(theme === 'dark' || theme === 'light' ? theme : systemTheme.matches ? 'dark' : 'light');
   }
 });
+
