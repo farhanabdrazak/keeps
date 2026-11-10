@@ -2,6 +2,7 @@
 (function(root){
   const api={
     url(value){try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:'';}catch{return '';}},
+    bookingFromMessage(text){const raw=(String(text).match(/https?:\/\/[^\s<>"']+/i)||[])[0]||'';const url=api.url(raw.replace(/[),.;!?]+$/,''));const relevant=/ticket|booking|reservation|confirmation|qr\s*code/i.test(text);const reference=(text.match(/(?:ref(?:erence)?|confirmation(?: number)?|booking (?:id|number))\s*[:#-]?\s+([A-Z0-9][A-Z0-9-]{2,})/i)||[])[1]||'';return {detected:relevant, url,reference,kind:/ticket|concert|exhibition|event/i.test(text)?'Event':/lunch|dinner|meal|restaurant|table/i.test(text)?'Meal':'Other',status:/confirmed|booked|sorted|confirmation/i.test(text)?'Confirmed':'To book'};},
     normalize(p){p.itinerary=Array.isArray(p.itinerary)?p.itinerary.filter(x=>x&&typeof x.id==='string'&&typeof x.title==='string'&&typeof x.start==='string'):[];p.bookings=Array.isArray(p.bookings)?p.bookings.filter(x=>x&&typeof x.id==='string'&&typeof x.title==='string'):[];p.budget=Number.isSafeInteger(p.budget)&&p.budget>0?p.budget:0;p.notes=typeof p.notes==='string'?p.notes:'';return p;},
     day(items,date,field){return items.filter(x=>!date||String(x[field]||'').startsWith(date));},
     sorted(items){return [...items].sort((a,b)=>(a.start||'9999').localeCompare(b.start||'9999'));},
