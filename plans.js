@@ -129,6 +129,26 @@
   const renderOriginalMemories=renderMemories;
   renderMemories=function(){renderOriginalMemories();document.querySelectorAll('.memory-card').forEach(card=>{const id=Number(card.querySelector('[data-edit]')?.dataset.edit);const m=memories.find(x=>x.id===id);if(m?.category!=='Plans'||document.documentElement.dataset.version==='earlier')return;const b=document.createElement('button');b.type='button';b.className='open-saved-plan';b.textContent='Open in My plans →';b.onclick=()=>{closePanel(false);fromMemory(id);if(!board.open)board.showModal();};card.append(b);});};
   renderMemories();
+  let plansPanelActive=false;
+  const panelTab=document.createElement('button');panelTab.type='button';panelTab.id='memory-plans-tab';panelTab.textContent='My plans';panelTab.setAttribute('aria-controls','memory-plans-content');
+  document.querySelector('.scope-tabs').append(panelTab);
+  const panelPlans=document.createElement('div');panelPlans.id='memory-plans-content';panelPlans.className='memory-list panel-plans';panelPlans.hidden=true;document.querySelector('#memory-list').after(panelPlans);
+  function renderPanelPlans(){
+    const isFinal=document.documentElement.dataset.version!=='earlier';panelTab.hidden=!isFinal;if(!isFinal)plansPanelActive=false;
+    panelTab.classList.toggle('active',plansPanelActive);panelTab.setAttribute('aria-pressed',String(plansPanelActive));
+    document.querySelectorAll('.scope-tabs [data-scope]').forEach(b=>{if(plansPanelActive)b.classList.remove('active');});
+    ['#scope-note','#filters','.status-row','#memory-list','.panel-foot'].forEach(sel=>document.querySelector('#memory-panel '+sel).hidden=plansPanelActive);
+    panelPlans.hidden=!plansPanelActive;
+    const items=plans.filter(involved);
+    panelPlans.innerHTML=`<p class="plan-muted">Plans you are involved in. Open one to view its schedule, bookings and costs.</p>${items.map(p=>`<button type="button" class="panel-plan-card" data-panel-plan="${esc(p.id)}"><strong>${esc(p.title)}</strong><small>Host: ${esc(p.host)}</small><span>${KeepsPeople.stack(p.people)}</span><small>${p.itinerary.length} activities · ${p.tasks.filter(t=>t.done).length}/${p.tasks.length} tasks done</small><span class="panel-plan-open">Open plan →</span></button>`).join('')||'<p class="plan-muted">No plans yet. Save a chat message to start one.</p>'}<button type="button" class="primary" data-panel-plan="new">Create a plan</button>`;
+  }
+  panelTab.onclick=()=>{plansPanelActive=true;renderPanelPlans();};
+  panelPlans.onclick=e=>{const id=e.target.closest('[data-panel-plan]')?.dataset.panelPlan;if(!id)return;closePanel(false);open(id==='new'?undefined:id);if(id==='new')board.querySelector('#new-plan-title')?.focus();};
+  document.addEventListener('click',e=>{if(e.target.closest('.scope-tabs [data-scope]'))plansPanelActive=false;},true);
+  const memoriesBeforePlanTab=renderMemories;renderMemories=function(){memoriesBeforePlanTab();renderPanelPlans();};
+  const renderBeforePanel=render;render=function(){renderBeforePanel();renderPanelPlans();};
+  new MutationObserver(()=>{renderMemories();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-version']});
+  renderMemories();
   const originalInit=init;init=function(){plans=[];selected=null;save();originalInit();};
   const visibility=()=>{openButton.hidden=document.documentElement.dataset.version==='earlier';if(openButton.hidden&&board.open)board.close();};
   new MutationObserver(visibility).observe(document.documentElement,{attributes:true,attributeFilter:['data-version']});visibility();

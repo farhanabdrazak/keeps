@@ -80,3 +80,4 @@
 #save-to-plan-dialog{max-width:560px;max-height:90dvh;overflow:auto}#save-to-plan-dialog h2{font-size:23px;margin:0}.save-stop-toggle{display:flex;align-items:center;gap:8px}.save-stop-toggle input{width:16px;margin:0}
 
 #save-to-plan-dialog [hidden]{display:none!important}
+#memory-panel [hidden]{display:none!important}.panel-plans{padding-top:8px}.panel-plan-card{display:flex;flex-direction:column;align-items:flex-start;gap:9px;text-align:left;width:100%;padding:16px;margin-bottom:12px;border:1px solid var(--border);border-radius:12px;background:white}.panel-plan-card>strong{font-size:15px;line-height:1.4}.panel-plan-card>small{font-size:11px;color:var(--muted)}.panel-plan-open{font-size:12px;color:var(--blue)}[data-theme="dark"] .panel-plan-card{background:#202938}
