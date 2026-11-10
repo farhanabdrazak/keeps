@@ -78,3 +78,5 @@
 .open-saved-plan{display:block;width:100%;text-align:left;color:var(--blue);font-size:12px;border-top:1px solid var(--border);margin-top:10px;padding:10px 0 0}
 .save-message-to-plan{font-size:11px;color:var(--blue);padding:5px 2px;margin-top:3px}
 #save-to-plan-dialog{max-width:560px;max-height:90dvh;overflow:auto}#save-to-plan-dialog h2{font-size:23px;margin:0}.save-stop-toggle{display:flex;align-items:center;gap:8px}.save-stop-toggle input{width:16px;margin:0}
+
+#save-to-plan-dialog [hidden]{display:none!important}
