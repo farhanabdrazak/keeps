@@ -7,6 +7,8 @@
  const ui=document.createElement('section'); ui.className='context-tools';
  ui.innerHTML='<div id="followup-strip" aria-live="polite"></div><label for="recall-query">Bring a memory into this reply</label><div class="recall-row"><input id="recall-query" type="search" placeholder="Search saved plans, amounts or tasks…"><button id="recall-toggle" type="button">Browse saved</button></div><div id="recall-results" hidden></div><small id="local-note">Demo stays in this browser. Follow-ups appear while Keeps is open; no background alerts.</small>';
  document.querySelector('.composer-area').prepend(ui);
+ const attachmentDraft=document.createElement('div');attachmentDraft.id='memory-attachment-draft';attachmentDraft.setAttribute('aria-live','polite');
+ document.querySelector('#send-form').before(attachmentDraft);
  const dialog=document.createElement('dialog'); dialog.id='followup-dialog'; dialog.setAttribute('aria-labelledby','followup-heading');
  dialog.innerHTML='<form id="followup-form"><h2 id="followup-heading">Plan a follow-up</h2><p id="followup-name"></p><label>When<input id="followup-time" type="datetime-local" required></label><label for="followup-people">People involved <span class="optional-label">(optional)</span></label><input id="followup-people" type="text" maxlength="600" placeholder="e.g. You, Jamie, Sarah" aria-describedby="followup-people-help"><p id="followup-people-help" class="people-help">Separate names with commas. Names stay with this reminder; no invitations are sent.</p><p class="modal-note">Shown here when due, including on your next visit. Export to your calendar for scheduling outside Keeps. Calendar alerts depend on your calendar settings.</p><div class="modal-actions"><button type="button" id="followup-cancel" class="secondary">Cancel</button><button class="primary" type="submit">Set follow-up</button></div><button type="button" id="followup-remove" class="text-button">Remove follow-up</button></form>';
  document.body.append(dialog);
@@ -16,6 +18,8 @@
  function persist(){if(!ready)return;try{localStorage.setItem(key,JSON.stringify({messages,memories,suggestion,nextId,followups}));}catch{document.querySelector('#local-note').textContent='Browser storage unavailable. Changes will last only for this visit.';}}
  function render(){
   ui.hidden=!final();
+  attachmentDraft.hidden=!pendingMemoryAttachment;
+  attachmentDraft.innerHTML=pendingMemoryAttachment?`<div class="attachment-draft-heading"><span>Memory attached · sends with your message</span><button type="button" id="remove-memory-attachment" aria-label="Remove attached memory">×</button></div>${memoryAttachmentMarkup(pendingMemoryAttachment)}`:'';
   document.querySelectorAll('.memory-integrations,.reminder-people,.saved-message-link').forEach(e=>e.remove());
   if(final()){
    document.querySelectorAll('#memory-list [data-edit]').forEach(button=>{
@@ -60,8 +64,9 @@
  document.querySelector('#followup-remove').onclick=()=>{delete followups[editingId];dialog.close();renderMemories();};
  document.querySelector('#followup-form').onsubmit=e=>{e.preventDefault();const date=new Date(document.querySelector('#followup-time').value);if(!Number.isFinite(date.getTime()))return;followups[editingId]={when:date.toISOString(),people:KeepsFollowups.people(document.querySelector('#followup-people').value)};dialog.close();renderMemories();notify('Follow-up set. It will appear here when due.');};
  document.addEventListener('click',e=>{
-  const b=e.target.closest('button');if(!b||!final())return;
-  if(b.dataset.reuse){const m=get(b.dataset.reuse);if(!m)return;closePanel(false);const input=document.querySelector('#message-input');const text=`${m.title}${m.detail?' — '+m.detail:''}${peopleLine(m.id)?' · '+peopleLine(m.id):''}`;input.value=(input.value?input.value+'\n':'')+text;input.focus();notify('Added to your draft. Review it before sending.');}
+  const b=e.target.closest('button');if(!b)return;if(!final()&&b.id!=='remove-memory-attachment')return;
+  if(b.id==='remove-memory-attachment'){pendingMemoryAttachment=null;render();document.querySelector('#message-input').focus();}
+  if(b.dataset.reuse){const m=get(b.dataset.reuse);if(!m)return;closePanel(false);pendingMemoryAttachment={title:m.title,detail:m.detail||'',category:m.category,people:namesFor(m.id).join(', ')};render();document.querySelector('#message-input').focus();notify('Memory attached. Add a message or send the card on its own.');}
   if(b.dataset.findMemory){const m=get(b.dataset.findMemory);if(!m)return;scope=m.scope;category=m.category;document.querySelector('#show-resolved').checked=m.resolved;renderMemories();openPanel();}
   if(b.dataset.followup){editingId=Number(b.dataset.followup);const m=get(editingId);if(!m)return;document.querySelector('#followup-name').textContent=m.title;const d=followups[editingId]?new Date(followups[editingId].when):new Date(Date.now()+3600000);document.querySelector('#followup-time').value=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);document.querySelector('#followup-people').value=namesFor(editingId).join(', ');document.querySelector('#followup-remove').hidden=!followups[editingId];dialog.showModal();}
   if(b.dataset.calendar){const m=get(b.dataset.calendar);if(!m||!followups[m.id])return;const content=KeepsFollowups.calendar(m,followups[m.id]);const url=URL.createObjectURL(new Blob([content],{type:'text/calendar;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='keeps-followup.ics';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify('Calendar file downloaded. Open it in your calendar to import.');}

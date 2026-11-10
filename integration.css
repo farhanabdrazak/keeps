@@ -22,3 +22,14 @@
 .due-people { display:block; font-size:10px; color:var(--muted); margin-top:3px; overflow-wrap:anywhere; }
 #followup-strip button { text-align:left; max-width:100%; overflow-wrap:anywhere; }
 #followup-dialog { max-height:90dvh; overflow-y:auto; }
+
+#memory-attachment-draft { margin:0 0 8px; border:1px solid var(--border); border-radius:10px; padding:9px 12px; background:#f5f6fc; }
+#memory-attachment-draft[hidden] { display:none; }
+.attachment-draft-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:11px; color:var(--muted); }
+.attachment-draft-heading button { font-size:22px; padding:2px 8px; color:inherit; }
+.message-memory-card { display:flex; flex-direction:column; gap:5px; border-left:3px solid var(--blue); border-radius:6px; background:#edf1fc; padding:10px 12px; font-size:12px; line-height:1.45; overflow-wrap:anywhere; max-width:100%; }
+.message>.message-memory-card { width:min(320px,85%); margin-bottom:5px; }
+.memory-card-label { font-size:10px; color:var(--muted); }
+.message-memory-card small { color:var(--muted); }
+[data-theme="dark"] #memory-attachment-draft { background:#1d2635; }
+[data-theme="dark"] .message-memory-card { background:#29344c; color:#e7ecf5; }
