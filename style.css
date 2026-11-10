@@ -309,3 +309,11 @@
   .kip-message-bubble{min-width:0;max-width:290px;padding:10px}
   .kip-message-actions button{padding:6px 8px}
 }
+
+
+/* Final conversation card must override the light personality gradient. */
+[data-theme="dark"][data-version="final"] .conversation.selected {
+  background:linear-gradient(135deg,#26344d,#302940);
+  box-shadow:inset 0 0 0 1px #454361;
+  color:#e7ecf5;
+}

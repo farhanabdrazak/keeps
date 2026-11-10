@@ -6,6 +6,8 @@ The final interface now connects capture to later action: saved-message badges, 
 
 This remains a fictional single-person messenger. Shared/private are simulated audiences. No messaging-account access, cross-device sync, background notifications or two-way calendar sync is implemented. Browser storage is local to this origin; Restart demo clears the saved conversation and follow-ups. Calendar alerts depend on the application used to import the exported `.ics` file.
 
+Follow-ups accept multiple names in the optional People involved field. Names appear on the memory card, due reminder, recall results, reply draft and exported calendar notes. They can be edited or cleared and persist with the date. These are labels, not invitations or sharing permissions. Previously saved date-only follow-ups are migrated without losing their date.
+
 ## Evaluation
 
 Compare the prior capture-and-retrieve build (`fe405e960ac0a5689928f6d456979720715ddc85`) with this revision using matched conversations and alternate condition order. Measure correct reuse in a draft, total effort including capture, unaided discovery, follow-up recognition, calendar import accuracy and unwanted interruptions. Repeat visits are needed to assess whether saved information continues to be used. No new participant outcomes are claimed.
@@ -13,3 +15,5 @@ Compare the prior capture-and-retrieve build (`fe405e960ac0a5689928f6d4569797207
 ## Verification record
 
 JavaScript syntax checks passed. Interactive browser testing could not run in the editing environment because Chromium was blocked from starting. Before participant testing, check reply reuse and focus, due follow-ups, refresh persistence, reset, calendar import/time zone, dark mode, earlier/final switching and mobile layout. The report leaves new evaluation data as placeholders.
+
+Run `node --test tests/followup-data.test.cjs` for date migration, multiple-name editing/storage, and calendar date/name escaping and Unicode line folding. All three tests passed for the people-field revision. The selected Messages card now has a dark-mode override for its final-design gradient.

@@ -12,3 +12,13 @@
 
 .composer-area { flex-shrink:0; max-height:50dvh; overflow-y:auto; }
 #recall-results span { min-width:0; overflow-wrap:anywhere; }
+
+.reminder-people { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.people-caption { width:100%; font-size:10px; color:var(--muted); }
+.person-chip { padding:4px 8px; border-radius:20px; border:1px solid var(--border); background:#eff2fc; color:#46567c; font-size:11px; overflow-wrap:anywhere; max-width:100%; }
+[data-theme="dark"] .person-chip { background:#29344c; color:#cbd6f4; }
+.people-help { font-size:11px; line-height:1.5; color:var(--muted); margin:8px 0 0; }
+.optional-label { font-weight:400; color:var(--muted); }
+.due-people { display:block; font-size:10px; color:var(--muted); margin-top:3px; overflow-wrap:anywhere; }
+#followup-strip button { text-align:left; max-width:100%; overflow-wrap:anywhere; }
+#followup-dialog { max-height:90dvh; overflow-y:auto; }
